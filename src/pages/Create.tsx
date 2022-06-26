@@ -30,6 +30,29 @@ function Create() {
     console.log(Object.values(meetingTopics));
   }, [meetingTopics]);
 
+  const parseMeetingDuration = (option: string) => {
+    switch(option) {
+        case '15 minutes':
+            setMeetingDuration(15);
+            break;
+        case '30 minutes':
+            setMeetingDuration(30);
+            break;
+        case '45 minutes':
+            setMeetingDuration(45);
+            break;
+        case '1 hour':
+            setMeetingDuration(60);
+            break;
+       case '1.5 hours':
+           setMeetingDuration(90);
+            break;
+       case '2 hours':
+           setMeetingDuration(120);
+            break;
+    }
+  };
+
   const handleAddMeetingTopic = (topicName: string) => {
     let newTopic = {
       id: uuid(),
@@ -62,12 +85,14 @@ function Create() {
               How long is your meeting?
             </Text>
             <Select
+            onChange={({ option}) => parseMeetingDuration(option)}
               options={[
                 "15 minutes",
                 "30 minutes",
                 "45 minutes",
                 "1 hour",
                 "1.5 hours",
+                "2 hours",
               ]}
             />
           </Box>
@@ -91,12 +116,14 @@ function Create() {
             />
           </Box>
 
+          {meetingDuration && ( <Heading>{meetingDuration}</Heading>)}
+
           {Object.keys(meetingTopics).length > 0 && (
             <Box align="center" pad={{ vertical: "medium" }}>
               <Text margin={{ vertical: "small" }}>
                 Here's your topics:
                 {Object.values(meetingTopics).map((topic: any) => (
-                  <div key={topic.id}>{topic.name}</div>
+                  <div key={topic.id}>{topic.name} - {topic.percentageOfMeeting} minutes</div>
                 ))}
               </Text>
             </Box>
