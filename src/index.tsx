@@ -1,15 +1,23 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
+import React from "react";
+import ReactDOM from "react-dom/client";
+import { Routes, Route, BrowserRouter } from "react-router-dom";
+import Create from "./pages/Create";
+import Welcome from "./pages/Welcome";
+import GrommetBoilerplate from "./GrommetBoilerplate";
+import reportWebVitals from "./reportWebVitals";
 
 const root = ReactDOM.createRoot(
-  document.getElementById('root') as HTMLElement
+  document.getElementById("root") as HTMLElement
 );
 root.render(
   <React.StrictMode>
-    <App />
+    <BrowserRouter>
+      <Routes>
+        <Route path="grommet" element={<GrommetBoilerplate />} />
+        <Route path="create" element={<Create />} />
+        <Route path="/" element={<Welcome />} />
+      </Routes>
+    </BrowserRouter>
   </React.StrictMode>
 );
 
