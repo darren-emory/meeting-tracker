@@ -24,6 +24,7 @@ interface MeetingTopic {
 function Create() {
   const [meetingDuration, setMeetingDuration] = useState<number>();
   const [meetingTopics, setMeetingTopics] = useState({});
+  const [topicInput, setTopicInput] = useState("");
 
   useEffect(() => {
     console.log(Object.values(meetingTopics));
@@ -82,9 +83,14 @@ function Create() {
             <input
               type="text"
               className="textInput"
+              value={topicInput}
+              onChange={(e) =>
+                setTopicInput((e.target as HTMLInputElement).value)
+              }
               onKeyDown={(e) => {
                 if (e.key === "Enter") {
                   handleAddMeetingTopic((e.target as HTMLInputElement).value);
+                  setTopicInput("");
                 }
               }}
             />
@@ -94,7 +100,6 @@ function Create() {
             <Box align="center" pad={{ vertical: "medium" }}>
               <Text margin={{ vertical: "small" }}>
                 Here's your topics:
-                {/* {renderMeetingTopics()} */}
                 {Object.values(meetingTopics).map((topic: any) => (
                   <div key={topic.id}>{topic.name}</div>
                 ))}
