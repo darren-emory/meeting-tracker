@@ -15,7 +15,12 @@ function Welcome() {
       >
         <Heading>Welcome to MAX</Heading>
         <Link to="/create">
-          <Button primary color="accent-4" label="Set Up Your Meeting" />
+          <Button
+            primary
+            color="accent-4"
+            label="Set Up Your Meeting"
+            size="large"
+          />
         </Link>
       </Main>
     </AppWrapper>

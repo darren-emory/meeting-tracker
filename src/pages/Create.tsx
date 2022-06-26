@@ -23,7 +23,7 @@ interface MeetingTopic {
 
 function Create() {
   const [meetingDuration, setMeetingDuration] = useState<number>();
-  const [meetingTopics, setMeetingTopics] = useState({});
+  const [meetingTopics, setMeetingTopics] = useState(Array<MeetingTopic>);
   const [topicInput, setTopicInput] = useState("");
 
   useEffect(() => {
@@ -42,11 +42,6 @@ function Create() {
     setMeetingTopics(updatedMeetingTopics);
   };
 
-  const renderMeetingTopics = () => {
-    Object.entries(meetingTopics).map(([key]) => {
-      return "yay";
-    });
-  };
   const calculateNewTopicPercentage = () => {
     return 1;
   };
@@ -109,7 +104,12 @@ function Create() {
 
           <Box align="center" pad={{ vertical: "medium" }}>
             <Link to="/create">
-              <Button primary color="accent-4" label="Set Up Your Meeting" />
+              <Button
+                primary
+                color="accent-4"
+                label="Begin Meeting"
+                size="large"
+              />
             </Link>
           </Box>
         </Card>
