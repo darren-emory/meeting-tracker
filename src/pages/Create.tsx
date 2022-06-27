@@ -6,13 +6,13 @@ import {
   Box,
   Button,
   Card,
-  Grid,
   Heading,
   Main,
   Paragraph,
   Select,
   Text,
   TextInput,
+  Tip,
 } from "grommet";
 
 interface MeetingTopic {
@@ -22,7 +22,7 @@ interface MeetingTopic {
 
 function Create() {
   const [meetingDuration, setMeetingDuration] = useState<number>();
-  const [topicDuration, setTopicDuration] = useState<number>();
+  const [topicDuration, setTopicDuration] = useState<any>();
   const [meetingTopics, setMeetingTopics] = useState({});
   const [topicInput, setTopicInput] = useState("");
 
@@ -30,7 +30,7 @@ function Create() {
     calculateTopicDuration();
   }, [meetingDuration, meetingTopics]);
 
-  const parseMeetingDuration = (option: string) => {
+  const handleMeetingDuration = (option: string) => {
     switch (option) {
       case "15 minutes":
         setMeetingDuration(15);
@@ -66,12 +66,16 @@ function Create() {
   };
 
   const calculateTopicDuration = () => {
-    // get total meetingTopics
-    // divide meetingTopics by meetingDuration
-    // set state
-
-    const totalTopics = Object.keys(meetingTopics).length;
-    meetingDuration && setTopicDuration(meetingDuration / totalTopics);
+    let totalTopics = Object.keys(meetingTopics).length;
+    if (meetingDuration) {
+      let topicDuration: any = meetingDuration / totalTopics;
+      if (topicDuration % 2 !== 0) {
+        topicDuration = topicDuration.toFixed(2);
+        setTopicDuration(topicDuration);
+      } else {
+        setTopicDuration(topicDuration);
+      }
+    }
   };
 
   return (
@@ -90,7 +94,7 @@ function Create() {
               How long is your meeting?
             </Text>
             <Select
-              onChange={({ option }) => parseMeetingDuration(option)}
+              onChange={({ option }) => handleMeetingDuration(option)}
               options={[
                 "15 minutes",
                 "30 minutes",
@@ -105,20 +109,22 @@ function Create() {
             <Text margin={{ vertical: "small" }}>
               What topics do you want to discuss?
             </Text>
-            <input
-              type="text"
-              className="textInput"
-              value={topicInput}
-              onChange={(e) =>
-                setTopicInput((e.target as HTMLInputElement).value)
-              }
-              onKeyDown={(e) => {
-                if (e.key === "Enter") {
-                  handleAddMeetingTopic((e.target as HTMLInputElement).value);
-                  setTopicInput("");
+            <Tip content="Press Enter to add topics">
+              <input
+                type="text"
+                className="textInput"
+                value={topicInput}
+                onChange={(e) =>
+                  setTopicInput((e.target as HTMLInputElement).value)
                 }
-              }}
-            />
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    handleAddMeetingTopic((e.target as HTMLInputElement).value);
+                    setTopicInput("");
+                  }
+                }}
+              />
+            </Tip>
           </Box>
 
           {Object.keys(meetingTopics).length > 0 && (
