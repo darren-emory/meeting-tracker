@@ -14,10 +14,12 @@ import {
   TextInput,
   Tip,
 } from "grommet";
+import CreatedTopic from "../components/CreatedTopic";
 
 interface MeetingTopic {
   id: any;
   name: string;
+  weight: number;
 }
 
 function Create() {
@@ -132,9 +134,12 @@ function Create() {
               <Text margin={{ vertical: "small" }}>
                 Here's your topics:
                 {Object.values(meetingTopics).map((topic: any) => (
-                  <div key={topic.id}>
-                    {topic.name} - {topicDuration} minutes
-                  </div>
+                  <CreatedTopic
+                    key={topic.id}
+                    id={topic.id}
+                    name={topic.name}
+                    duration={topicDuration}
+                  />
                 ))}
               </Text>
             </Box>
