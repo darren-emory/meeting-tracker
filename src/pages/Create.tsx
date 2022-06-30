@@ -83,14 +83,13 @@ function Create() {
   return (
     <AppWrapper>
       <Main
-        pad="large"
         direction="column"
+        pad={{ bottom: "large" }}
         align="center"
-        justify="center"
         background="brand"
       >
         <Heading>Let's set up your awesome meeting:</Heading>
-        <Card background="light-1" pad="large" width="large" align="center">
+        <Card background="light-1" pad="medium" width="medium">
           <Box align="center" pad={{ vertical: "medium" }}>
             <Text margin={{ vertical: "small" }}>
               How long is your meeting?
@@ -131,8 +130,14 @@ function Create() {
 
           {Object.keys(meetingTopics).length > 0 && (
             <Box align="center" pad={{ vertical: "medium" }}>
-              <Text margin={{ vertical: "small" }}>
-                Here's your topics:
+              <Heading
+                textAlign="center"
+                margin={{ vertical: "small" }}
+                level="3"
+              >
+                Your awesome meeting agenda:
+              </Heading>
+              <Box>
                 {Object.values(meetingTopics).map((topic: any) => (
                   <CreatedTopic
                     key={topic.id}
@@ -141,21 +146,20 @@ function Create() {
                     duration={topicDuration}
                   />
                 ))}
-              </Text>
+              </Box>
             </Box>
           )}
-
-          <Box align="center" pad={{ vertical: "medium" }}>
-            <Link to="/create">
-              <Button
-                primary
-                color="accent-4"
-                label="Begin Meeting"
-                size="large"
-              />
-            </Link>
-          </Box>
         </Card>
+        <Box align="" pad={{ vertical: "medium" }}>
+          <Link to="/create">
+            <Button
+              primary
+              color="accent-4"
+              label="Begin Meeting"
+              size="large"
+            />
+          </Link>
+        </Box>
       </Main>
     </AppWrapper>
   );
