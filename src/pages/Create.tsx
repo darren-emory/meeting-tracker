@@ -86,7 +86,6 @@ function Create() {
 
   const updateTopic = (topic: MeetingTopic) => {
     const newTopics = meetingTopics.map((t) => {
-      // 👇️ if id equals 2 replace object
       if (t?.key === topic.key) {
         return {
           name: topic.name,
@@ -96,7 +95,6 @@ function Create() {
         };
       }
 
-      // 👇️ otherwise return object as is
       return t;
     });
 
@@ -104,15 +102,32 @@ function Create() {
   };
 
   const calculateTopicDuration = () => {
+    // TODO:       // find length of each weight class before processing time
+    // don't divide time by half if there's no other weights left
+
     let totalTopics = Object.keys(meetingTopics).length;
+    let remainingTime = meetingDuration;
+    let weightedTime = meetingDuration;
 
     let weightedTopics = [];
+
+    // divide topics into arrays based on weight
     for (let w = 3; w > 0; w--) {
       weightedTopics[w] = meetingTopics.filter((topic) => topic?.weight === w);
+
+      let weightedTime = (remainingTime as number) / 2;
+      (remainingTime as number) -= weightedTime;
+
+      for (let t = 0; t < weightedTopics[w].length; t++) {
+        let calculatedWeightedTopicTime =
+          (weightedTime as number) / weightedTopics[w].length;
+
+        (weightedTopics[w][t] as MeetingTopic).topicDuration =
+          calculatedWeightedTopicTime;
+
+        console.log(weightedTopics[w][t]);
+      }
     }
-    // [1 = weighted 3]
-    // let topicsWeighted3 =
-    // starting with weight 3, divide meetingDuration by half, one half going to weight 3 topics (divded evenly), and other half going to next weight, 2, and 1
 
     if (meetingDuration) {
       let topicDuration: any = meetingDuration / totalTopics;
