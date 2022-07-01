@@ -111,22 +111,23 @@ function Create() {
 
     let weightedTopics = [];
 
-    // divide topics into arrays based on weight
     for (let w = 3; w > 0; w--) {
+      // divide topics into arrays based on weight
       weightedTopics[w] = meetingTopics.filter((topic) => topic?.weight === w);
 
+      // halfing meeting time per weight
       let weightedTime = (remainingTime as number) / 2;
       (remainingTime as number) -= weightedTime;
 
+      // half weight time and divide it among topics
       for (let t = 0; t < weightedTopics[w].length; t++) {
         let calculatedWeightedTopicTime =
           (weightedTime as number) / weightedTopics[w].length;
 
         (weightedTopics[w][t] as MeetingTopic).topicDuration =
           calculatedWeightedTopicTime;
-
-        console.log(weightedTopics[w][t]);
       }
+      console.log(remainingTime);
     }
 
     if (meetingDuration) {
