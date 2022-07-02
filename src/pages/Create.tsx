@@ -25,7 +25,7 @@ interface MeetingTopic {
 
 function Create() {
   const [meetingDuration, setMeetingDuration] = useState<number>();
-  const [topicDuration, setTopicDuration] = useState<any>();
+  const [initialTopicDuration, setInitialTopicDuration] = useState<any>();
   const [meetingTopics, setMeetingTopics] = useState<
     Array<MeetingTopic | null>
   >([]);
@@ -72,15 +72,9 @@ function Create() {
     calculateTopicDuration();
   };
 
-  const calculateTopicWeight = (topic: MeetingTopic, increase?: boolean) => {
+  const handleCustomTopicTime = (topic: MeetingTopic, value: number) => {
     let updatedTopic: MeetingTopic = topic;
-
-    if (increase && topic.weight < 3) {
-      updatedTopic.weight++;
-    } else if (!increase && topic.weight > 1) {
-      updatedTopic.weight--;
-    }
-
+    updatedTopic.topicDuration = value;
     updateTopic(updatedTopic);
   };
 
@@ -102,43 +96,8 @@ function Create() {
   };
 
   const calculateTopicDuration = () => {
-    // TODO:       // find length of each weight class before processing time
-    // don't divide time by half if there's no other weights left
-
-    let totalTopics = Object.keys(meetingTopics).length;
-    let remainingTime = meetingDuration;
-    let weightedTime = meetingDuration;
-
-    let weightedTopics = [];
-
-    for (let w = 3; w > 0; w--) {
-      // divide topics into arrays based on weight
-      weightedTopics[w] = meetingTopics.filter((topic) => topic?.weight === w);
-
-      // halfing meeting time per weight
-      let weightedTime = (remainingTime as number) / 2;
-      (remainingTime as number) -= weightedTime;
-
-      // half weight time and divide it among topics
-      for (let t = 0; t < weightedTopics[w].length; t++) {
-        let calculatedWeightedTopicTime =
-          (weightedTime as number) / weightedTopics[w].length;
-
-        (weightedTopics[w][t] as MeetingTopic).topicDuration =
-          calculatedWeightedTopicTime;
-      }
-      console.log(remainingTime);
-    }
-
-    if (meetingDuration) {
-      let topicDuration: any = meetingDuration / totalTopics;
-      if (topicDuration % 2 !== 0) {
-        topicDuration = topicDuration.toFixed(2);
-        setTopicDuration(topicDuration);
-      } else {
-        setTopicDuration(topicDuration);
-      }
-    }
+    const totalTopics = Object.keys(meetingTopics).length;
+    meetingDuration && setInitialTopicDuration(meetingDuration / totalTopics);
   };
 
   return (
@@ -202,8 +161,9 @@ function Create() {
                   {Object.values(meetingTopics).map((topic: any) => (
                     <CreatedTopic
                       key={topic.key}
+                      initialTopicDuration={initialTopicDuration}
                       topic={topic}
-                      calculateTopicWeight={calculateTopicWeight}
+                      handleCustomTopicTime={handleCustomTopicTime}
                     />
                   ))}
                 </Box>

@@ -1,12 +1,15 @@
-import { Box, Button, Heading } from "grommet";
+import { useState } from "react";
+import { Box, Button, Heading, TextInput } from "grommet";
 import { Add, FormAdd, FormSubtract, Tools } from "grommet-icons";
 
 interface CreatedTopicProps {
   topic: any;
-  calculateTopicWeight: (topic: any, increase?: boolean) => void;
+  handleCustomTopicTime: (topic: any, value: number) => void;
+  initialTopicDuration: number;
 }
 
 function CreatedTopic(props: CreatedTopicProps) {
+  const [value, setValue] = useState(0);
   return (
     <>
       <Box pad="small" direction="column" gap="small">
@@ -17,33 +20,13 @@ function CreatedTopic(props: CreatedTopicProps) {
         </Box>
 
         <Box direction="row">
-          <Button
-            size="small"
-            plain={undefined}
-            icon={<FormSubtract size="medium" style={{ width: 20 }} />}
-            onClick={() => {
-              props.calculateTopicWeight(props.topic);
-            }}
-            primary
-            style={{ width: 30, height: 30, padding: "3px 5px" }}
-          />
-          <Heading
-            level="3"
-            textAlign="center"
-            margin={{ vertical: "none", horizontal: "small" }}
-          >
-            {props.topic.topicDuration} Minutes, {props.topic.weight}
-          </Heading>
-
-          <Button
-            size="small"
-            plain={undefined}
-            icon={<FormAdd size="medium" style={{ width: 20 }} />}
-            onClick={() => {
-              props.calculateTopicWeight(props.topic, true);
-            }}
-            primary
-            style={{ width: 30, height: 30, padding: "3px 5px" }}
+          <TextInput
+            type={"number"}
+            placeholder={props.initialTopicDuration}
+            onChange={(e) => (
+              setValue(parseInt(e.target.value)),
+              props.handleCustomTopicTime(props.topic, value)
+            )}
           />
         </Box>
       </Box>
