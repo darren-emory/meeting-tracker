@@ -74,12 +74,13 @@ function Create() {
   };
 
   const calculateCustomMeetingDuration = () => {
-    let updatedMeetingDuration = 1;
+    let updatedMeetingDuration = 0;
     Object.values(meetingTopics).map((topic) => {
-      if (updatedMeetingDuration && topic)
+      if (topic) {
         updatedMeetingDuration = updatedMeetingDuration + topic.topicDuration;
+      }
     });
-    // setCustomMeetingDuration(updatedMeetingDuration);
+    setCustomMeetingDuration(updatedMeetingDuration);
   };
 
   const handleCustomTopicTime = (topic: MeetingTopic, value: number) => {
@@ -117,7 +118,7 @@ function Create() {
       }
     });
 
-    console.log(newTopics);
+    setMeetingTopics(newTopics);
   };
 
   return (
@@ -131,7 +132,7 @@ function Create() {
                 How long is your meeting?
               </Text>
               {customMeetingDuration ? (
-                <>nah</>
+                <h2>{customMeetingDuration}</h2>
               ) : (
                 <Select
                   onChange={({ option }) => handleMeetingDuration(option)}
