@@ -78,6 +78,7 @@ function Create() {
     Object.values(meetingTopics).map((topic) => {
       if (topic) {
         updatedMeetingDuration = updatedMeetingDuration + topic.topicDuration;
+        console.log(topic);
       }
     });
     setCustomMeetingDuration(updatedMeetingDuration);
