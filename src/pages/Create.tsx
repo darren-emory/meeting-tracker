@@ -19,12 +19,13 @@ import CreatedTopic from "../components/CreatedTopic";
 interface MeetingTopic {
   name: string;
   weight: number;
-  topicDuration: number | boolean;
+  topicDuration: number;
   [key: string]: string | number | boolean;
 }
 
 function Create() {
   const [meetingDuration, setMeetingDuration] = useState<number>();
+  const [customMeetingDuration, setCustomMeetingDuration] = useState<number>();
   const [initialTopicDuration, setInitialTopicDuration] = useState<any>();
   const [meetingTopics, setMeetingTopics] = useState<
     Array<MeetingTopic | null>
@@ -62,7 +63,7 @@ function Create() {
     let newTopic: MeetingTopic = {
       name: topicName,
       weight: 2,
-      topicDuration: false,
+      topicDuration: 0,
       key: uuid(),
     };
     let updatedMeetingTopics = meetingTopics;
@@ -72,10 +73,22 @@ function Create() {
     calculateTopicDuration();
   };
 
+  const calculateCustomMeetingDuration = () => {
+    let updatedMeetingDuration = 0;
+    Object.values(meetingTopics).map((topic) => {
+      if (topic) {
+        updatedMeetingDuration = updatedMeetingDuration + topic.topicDuration;
+        console.log(topic);
+      }
+    });
+    setCustomMeetingDuration(updatedMeetingDuration);
+  };
+
   const handleCustomTopicTime = (topic: MeetingTopic, value: number) => {
     let updatedTopic: MeetingTopic = topic;
     updatedTopic.topicDuration = value;
     updateTopic(updatedTopic);
+    calculateCustomMeetingDuration();
   };
 
   const updateTopic = (topic: MeetingTopic) => {
@@ -98,6 +111,15 @@ function Create() {
   const calculateTopicDuration = () => {
     const totalTopics = Object.keys(meetingTopics).length;
     meetingDuration && setInitialTopicDuration(meetingDuration / totalTopics);
+
+    const newTopics = meetingTopics;
+    Object.values(newTopics).forEach((topic) => {
+      if (topic && meetingDuration) {
+        topic.topicDuration = meetingDuration / totalTopics;
+      }
+    });
+
+    setMeetingTopics(newTopics);
   };
 
   return (
@@ -110,17 +132,21 @@ function Create() {
               <Text margin={{ vertical: "small" }}>
                 How long is your meeting?
               </Text>
-              <Select
-                onChange={({ option }) => handleMeetingDuration(option)}
-                options={[
-                  "15 minutes",
-                  "30 minutes",
-                  "45 minutes",
-                  "1 hour",
-                  "1.5 hours",
-                  "2 hours",
-                ]}
-              />
+              {customMeetingDuration ? (
+                <h2>{customMeetingDuration}</h2>
+              ) : (
+                <Select
+                  onChange={({ option }) => handleMeetingDuration(option)}
+                  options={[
+                    "15 minutes",
+                    "30 minutes",
+                    "45 minutes",
+                    "1 hour",
+                    "1.5 hours",
+                    "2 hours",
+                  ]}
+                />
+              )}
             </Box>
             <Box align="center" pad={{ vertical: "medium" }}>
               <Text margin={{ vertical: "small" }}>
