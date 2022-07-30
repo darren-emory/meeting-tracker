@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Box, Button, Heading, TextInput } from "grommet";
 import { Add, FormAdd, FormSubtract, Tools } from "grommet-icons";
 
@@ -10,6 +10,14 @@ interface CreatedTopicProps {
 
 function CreatedTopic(props: CreatedTopicProps) {
   const [value, setValue] = useState(0);
+
+  useEffect(() => {
+    setValue(props.initialTopicDuration);
+  }, []);
+
+  useEffect(() => {
+    props.handleCustomTopicTime(props.topic, value);
+  }, [value]);
   return (
     <>
       <Box pad="small" direction="column" gap="small">
@@ -23,10 +31,7 @@ function CreatedTopic(props: CreatedTopicProps) {
           <TextInput
             type={"number"}
             placeholder={props.initialTopicDuration}
-            onChange={(e) => (
-              setValue(parseInt(e.target.value)),
-              props.handleCustomTopicTime(props.topic, value)
-            )}
+            onChange={(e) => setValue(parseInt(e.target.value))}
           />
         </Box>
       </Box>
