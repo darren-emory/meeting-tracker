@@ -34,7 +34,11 @@ function Create() {
 
   useEffect(() => {
     calculateTopicDuration();
-  }, [meetingDuration, meetingTopics]);
+  }, [meetingDuration]);
+
+  useEffect(() => {
+    calculateCustomMeetingDuration();
+  }, [meetingTopics]);
 
   const handleMeetingDuration = (option: string) => {
     switch (option) {
@@ -78,7 +82,6 @@ function Create() {
     Object.values(meetingTopics).map((topic) => {
       if (topic) {
         updatedMeetingDuration = updatedMeetingDuration + topic.topicDuration;
-        console.log(topic);
       }
     });
     setCustomMeetingDuration(updatedMeetingDuration);
@@ -88,7 +91,6 @@ function Create() {
     let updatedTopic: MeetingTopic = topic;
     updatedTopic.topicDuration = value;
     updateTopic(updatedTopic);
-    calculateCustomMeetingDuration();
   };
 
   const updateTopic = (topic: MeetingTopic) => {
@@ -110,6 +112,7 @@ function Create() {
 
   const calculateTopicDuration = () => {
     const totalTopics = Object.keys(meetingTopics).length;
+    console.log(meetingDuration);
     meetingDuration && setInitialTopicDuration(meetingDuration / totalTopics);
 
     const newTopics = meetingTopics;
@@ -133,7 +136,7 @@ function Create() {
                 How long is your meeting?
               </Text>
               {customMeetingDuration ? (
-                <h2>{customMeetingDuration}</h2>
+                <h2>{customMeetingDuration} minutes</h2>
               ) : (
                 <Select
                   onChange={({ option }) => handleMeetingDuration(option)}
