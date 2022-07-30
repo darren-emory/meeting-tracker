@@ -9,15 +9,15 @@ interface CreatedTopicProps {
 }
 
 function CreatedTopic(props: CreatedTopicProps) {
-  const [value, setValue] = useState(0);
-
-  useEffect(() => {
-    setValue(props.initialTopicDuration);
-  }, []);
+  const [value, setValue] = useState(props.initialTopicDuration);
+  const [defaultValue, setDefaultValue] = useState<number | string>(
+    props.initialTopicDuration
+  );
 
   useEffect(() => {
     props.handleCustomTopicTime(props.topic, value);
   }, [value]);
+
   return (
     <>
       <Box pad="small" direction="column" gap="small">
@@ -30,8 +30,13 @@ function CreatedTopic(props: CreatedTopicProps) {
         <Box direction="row">
           <TextInput
             type={"number"}
-            placeholder={props.initialTopicDuration}
-            onChange={(e) => setValue(parseInt(e.target.value))}
+            placeholder={defaultValue}
+            onChange={(e) => (
+              setDefaultValue(""),
+              e.target.value === ""
+                ? setValue(0)
+                : setValue(parseInt(e.target.value))
+            )}
           />
         </Box>
       </Box>
